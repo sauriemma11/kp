@@ -75,3 +75,54 @@ def load_subtr_data(file_path):
 
     except Exception as e:
         raise Exception(f"Error loading data from {file_path}: {str(e)}")
+
+def plot_subtr_and_kp(data, dfkp):
+    """
+    Plot combined data with multiple subplots.
+
+    Args:
+        data (dict): Dictionary containing data.
+        dfkp (pd.DataFrame): Pandas DataFrame containing Kp data.
+    """
+    # Extract the data from the dictionary
+    datetime = pd.to_datetime(data['datetime'])
+    subtraction = data['subtraction']
+    std_dev_1hour = data['std_dev_1hour']
+    std_dev_daily = data['std_dev_daily']
+    kp_3hr = data['kp']
+
+    # Create a Pandas DataFrame with datetime as the index
+    df = pd.DataFrame({'subtraction': subtraction, 'std_dev_1hour': std_dev_1hour, 'std_dev_daily': std_dev_daily, 'kp': kp_3hr}, index=datetime)
+
+    # Create separate plots for Subtraction Data, 1-Hour Std Deviation, and Daily Std Deviation
+    fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, figsize=(12, 8))
+
+    # Plot for Subtraction Data (Minute-by-Minute)
+    ax1.plot(df.index, df['subtraction'], color='blue')
+    ax1.set_ylabel('Subtraction [nT]')
+    ax1.set_title('(GK2A - T89) - (G17 - T89) |B|')
+
+    # Plot for 1-Hour Standard Deviation
+    ax2.plot(std_dev_1hour.index, std_dev_1hour, color='green')
+    ax2.set_ylabel('Std Deviation')
+    ax2.set_title('1-Hour Standard Deviation')
+
+    # Plot for Daily Standard Deviation
+    ax3.plot(std_dev_daily.index, std_dev_daily, color='red')
+    ax3.set_ylabel('Std Deviation')
+    ax3.set_title('Daily Standard Deviation')
+
+    # Plot Kp Value (3 hr)
+    ax4.plot(dfkp['Time'], dfkp['Kp'])
+    ax4.set_ylabel('Kp Value')
+    ax4.set_xlabel('Time')
+    ax4.set_title('Kp Value (3 hr)')
+
+    # Adjust subplot spacing
+    plt.tight_layout()
+
+    # Show the plots
+    plt.show()
+
+# Example usage of the function
+# You can call plot_combined_data(data, dfkp) with your data and Kp DataFrame as arguments.
