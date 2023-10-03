@@ -131,3 +131,40 @@ def calc_hourly_stddev(datetime_list, subtr_list, kp_mask=None):
     hourly_std_dev = df['subtraction'].resample('H').std()
 
     return hourly_std_dev
+
+def calc_daily_stddev(datetime_list, subtr_list, kp_mask=None):
+    """
+    Calculate daily standard deviation of subtraction data with an optional Kp mask.
+
+    Args:
+        datetime_list (list): List of datetime values.
+        subtr_list (list): List of subtraction data.
+        kp_mask (list, optional): List of boolean values indicating Kp values over threshold.
+                                  If provided, only data points where kp_mask is True will be used.
+
+    Returns:
+        pd.Series: daily standard deviation of subtraction data.
+    """
+    # Create a pandas DataFrame with datetime as the index
+    df = pd.DataFrame({'datetime': datetime_list, 'subtraction': subtr_list})
+    df.set_index('datetime', inplace=True)
+
+    # Apply the Kp mask if provided
+    if kp_mask is not None:
+        df['subtraction'] = df['subtraction'].mask(kp_mask)
+
+    # Resample the data to hourly frequency and calculate standard deviation
+    daily_std_dev = df['subtraction'].resample('D').std()
+
+    return daily_std_dev
+
+def mean_std_dev(stddev):
+    meanstddev = stddev.mean()
+    return meanstddev
+
+
+def mean_std_dev(stddev):
+    meanstddev = stddev.mean()
+    return meanstddev
+
+
