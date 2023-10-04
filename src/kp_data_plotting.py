@@ -76,13 +76,12 @@ def load_subtr_data(file_path):
     except Exception as e:
         raise Exception(f"Error loading data from {file_path}: {str(e)}")
 
-def plot_subtr_and_kp(data, dfkp):
+def plot_subtr_and_kp(data):
     """
     Plot combined data with multiple subplots.
 
     Args:
         data (dict): Dictionary containing data.
-        dfkp (pd.DataFrame): Pandas DataFrame containing Kp data.
     """
     # Extract the data from the dictionary
     datetime = pd.to_datetime(data['datetime'])
@@ -113,7 +112,7 @@ def plot_subtr_and_kp(data, dfkp):
     ax3.set_title('Daily Standard Deviation')
 
     # Plot Kp Value (3 hr)
-    ax4.plot(dfkp['Time'], dfkp['Kp'])
+    ax4.plot(kp_3hr.index, kp_3hr)
     ax4.set_ylabel('Kp Value')
     ax4.set_xlabel('Time')
     ax4.set_title('Kp Value (3 hr)')
